@@ -369,22 +369,23 @@ html.reduced-motion .anim-element {
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
-/* Hero Name Display (Right Flank - No Box, Exact Same Font as Creative Director, Shifted Down) */
+/* Hero Name Display (Right Flank - No Box, Small Scale, Shifted Down) */
 .hero-identity-col {
-  max-width: 500px;
+  max-width: 480px;
   align-self: flex-start;
-  margin-top: 65px;
+  margin-top: 135px;
 }
 
 .hero-name-display {
   font-family: var(--font-display), var(--font-sans);
-  font-size: clamp(3rem, 5.6vw, 5.2rem);
+  font-size: clamp(1.65rem, 2.6vw, 2.4rem);
   font-weight: 800;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
   color: var(--text-primary);
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
   user-select: none;
+  white-space: nowrap;
   transition: transform 0.35s var(--ease-out);
 }
 
