@@ -369,29 +369,7 @@ html.reduced-motion .anim-element {
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
-/* Hero Name Display (Right Flank - No Box, Small Scale, Shifted Down) */
-.hero-identity-col {
-  max-width: 480px;
-  align-self: flex-start;
-  margin-top: clamp(200px, 28vh, 280px);
-}
 
-.hero-name-display {
-  font-family: var(--font-display), var(--font-sans);
-  font-size: clamp(1.65rem, 2.6vw, 2.4rem);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
-  user-select: none;
-  white-space: nowrap;
-  transition: transform 0.35s var(--ease-out);
-}
-
-.hero-name-display:hover {
-  transform: translateY(-2px);
-}
 
 /* Interactive Scroll Indicator Pill */
 .scroll-scrub-indicator {
@@ -2783,9 +2761,7 @@ html.reduced-motion .anim-element {
     flex-direction: column;
     gap: 24px;
   }
-  .hero-identity-col {
-    max-width: 100%;
-  }
+
   .hero-services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
