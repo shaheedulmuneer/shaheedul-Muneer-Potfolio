@@ -1,0 +1,10 @@
+# Local server binaries
+server_bin/
+
+# Operating system files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Temp & logs
+*.log
