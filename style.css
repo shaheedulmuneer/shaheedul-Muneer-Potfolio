@@ -373,7 +373,7 @@ html.reduced-motion .anim-element {
 .hero-identity-col {
   max-width: 480px;
   align-self: flex-start;
-  margin-top: 135px;
+  margin-top: clamp(200px, 28vh, 280px);
 }
 
 .hero-name-display {
