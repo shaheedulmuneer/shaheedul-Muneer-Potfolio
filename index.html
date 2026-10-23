@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=18.0">
+  <link rel="stylesheet" href="style.css?v=19.0">
 </head>
 <body>
 
@@ -501,17 +501,17 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="6 3 20 12 6 21 6 3"/>
                 </svg>
-                <span>Watch Works (8 Films)</span>
+                <span>Watch Works (9 Films)</span>
               </div>
             </div>
             <div class="card-meta">
               <div class="card-title-row">
                 <h3 class="card-title">High-Profile Works</h3>
-                <span class="reel-badge-pill" title="8 High-Profile & Celebrity Films Included">
+                <span class="reel-badge-pill" title="9 High-Profile & Celebrity Films Included">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                     <polygon points="6 3 20 12 6 21 6 3"/>
                   </svg>
-                  <span>8 Films</span>
+                  <span>9 Films</span>
                 </span>
               </div>
               <p class="card-desc">Exclusive high-profile celebrity campaigns, luxury brand endorsements, and VIP talent film direction.</p>
@@ -672,6 +672,152 @@
 
         </div>
 
+      </div>
+    </section>
+
+    <!-- VIP BREAKTHROUGH SPOTLIGHT SECTION -->
+    <section class="vip-spotlight-section" id="vip" aria-label="VIP Exclusive Breakthrough">
+      <div class="container-inner">
+        <div class="vip-card-shell glass-panel">
+          
+          <!-- VIP Ambient Luxury Glow Accents -->
+          <div class="vip-glow-gold"></div>
+          <div class="vip-glow-accent"></div>
+
+          <!-- VIP Header -->
+          <div class="vip-header-row">
+            <div class="vip-header-meta">
+              <div class="vip-badge-cluster">
+                <span class="vip-pill-gold">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+                  </svg>
+                  <span>VIP PROJECT SPOTLIGHT</span>
+                </span>
+                <span class="vip-pill-status">
+                  <span class="vip-status-dot"></span>
+                  <span>#1 Community-Upvoted on Emergent</span>
+                </span>
+              </div>
+
+              <h2 class="vip-display-headline">
+                A few weeks ago, <span class="vip-highlight-text">NKOS didn’t exist.</span><br>
+                <span class="vip-gradient-gold">Today, it’s the #1 project on Emergent.</span>
+              </h2>
+
+              <p class="vip-lead-desc">
+                An exclusive, high-impact motion showcase and breakthrough digital reveal. Engineered with surgical pacing, kinetic type choreography, and commercial-grade visual impact that conquered the Emergent platform.
+              </p>
+            </div>
+
+            <!-- VIP Key Metric Badges -->
+            <div class="vip-stats-column">
+              <div class="vip-stat-box">
+                <span class="vip-stat-value">#1</span>
+                <span class="vip-stat-label">Global Community Upvoted</span>
+              </div>
+              <div class="vip-stat-box">
+                <span class="vip-stat-value">100%</span>
+                <span class="vip-stat-label">Custom Motion & Sound Direction</span>
+              </div>
+              <div class="vip-stat-box">
+                <span class="vip-stat-value">4K UHD</span>
+                <span class="vip-stat-label">Master Commercial Quality</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIP Cinema Stage (Interactive Video Player) -->
+          <div class="vip-theater-stage" id="vipTheaterStage">
+            <div class="vip-video-shell">
+              <video 
+                id="vipSpotlightVideo"
+                class="vip-video-player"
+                src="animation/nandu/nkos_vip_emergent.mp4"
+                autoplay
+                loop
+                muted
+                playsinline
+                webkit-playsinline
+                preload="metadata"
+                title="Click to play or pause video"
+              ></video>
+
+              <!-- Video Overlay Badges -->
+              <div class="vip-theater-overlay-top">
+                <div class="vip-spec-pill">
+                  <span class="vip-pulse-ring"></span>
+                  <span>Emergent Winner Showcase</span>
+                </div>
+                <div class="vip-format-pill">
+                  <span>Pro Cinema Audio &amp; Color</span>
+                </div>
+              </div>
+
+              <!-- Interactive Controls Bar on Video -->
+              <div class="vip-theater-controls-bar">
+                <div class="vip-controls-left">
+                  <button type="button" class="vip-control-btn" id="vipPlayPauseBtn" aria-label="Play or Pause VIP Video" title="Play / Pause">
+                    <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="4" width="4" height="16" rx="1"/>
+                      <rect x="14" y="4" width="4" height="16" rx="1"/>
+                    </svg>
+                    <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                      <polygon points="6 3 20 12 6 21 6 3"/>
+                    </svg>
+                    <span class="vip-btn-label">Pause</span>
+                  </button>
+
+                  <button type="button" class="vip-control-btn" id="vipMuteToggleBtn" aria-label="Toggle Sound" title="Unmute Audio">
+                    <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+                      <line x1="23" y1="9" x2="17" y2="15"/>
+                      <line x1="17" y1="9" x2="23" y2="15"/>
+                    </svg>
+                    <svg class="icon-unmuted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    </svg>
+                    <span class="vip-btn-label" id="vipSoundLabel">Unmute Sound</span>
+                  </button>
+                </div>
+
+                <div class="vip-controls-right">
+                  <button type="button" class="vip-modal-trigger-btn" id="vipOpenModalBtn" data-project="nkos-vip" title="Open in Ultra 4K Cinema Modal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="15 3 21 3 21 9"/>
+                      <polygon points="9 21 3 21 3 15"/>
+                      <line x1="21" y1="3" x2="14" y2="10"/>
+                      <line x1="3" y1="21" x2="10" y2="14"/>
+                    </svg>
+                    <span>Full Cinema Modal</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- VIP Footer Action Row -->
+          <div class="vip-footer-action-row">
+            <div class="vip-action-text">
+              <span class="vip-action-tag">Have an ambitious project?</span>
+              <p class="vip-action-prompt">Commission high-caliber video production, commercial motion, and brand direction for your next milestone.</p>
+            </div>
+            <div class="vip-action-btns">
+              <a href="#contact" class="btn-gold-pill" id="vipContactBtn">
+                <span>Book VIP Direction</span>
+                <span class="pill-arrow-circle">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 

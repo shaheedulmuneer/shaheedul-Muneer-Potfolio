@@ -738,6 +738,15 @@ document.addEventListener('DOMContentLoaded', () => {
       video: "celebrity/Celebrity/Sam Bnglr 3.mp4",
       label: "Finale VIP 08",
       number: "08"
+    },
+    {
+      id: 9,
+      title: "NKOS — Emergent #1 Community Breakthrough",
+      category: "VIP Motion & Commercial Direction",
+      desc: "A few weeks ago, NKOS didn’t exist. Today, it’s the #1 community-upvoted project in Emergent. High-impact kinetic typography and UI reveal.",
+      video: "animation/nandu/nkos_vip_emergent.mp4",
+      label: "VIP Winner 09",
+      number: "09"
     }
   ];
 
@@ -1093,12 +1102,18 @@ document.addEventListener('DOMContentLoaded', () => {
     celebrity: {
       title: "VIP Spotlight — Celebrity Hero Commercial",
       category: "High-Profile & Celebrity",
-      desc: "Exclusive high-profile celebrity campaigns, luxury brand endorsements, VIP talent film direction, and red carpet visual production across 8 featured films.",
+      desc: "Exclusive high-profile celebrity campaigns, luxury brand endorsements, VIP talent film direction, and red carpet visual production across 9 featured films.",
       video: "celebrity/Celebrity/B4EAC4EA-34FC-4CD7-B7B4-BEA0FEB75E32.mp4",
       hasMultiVideo: true,
       playlistTitle: "High-Profile & Celebrity Films Playlist",
-      multiBadgeText: "8 Films Included",
+      multiBadgeText: "9 Films Included",
       videoList: celebrityVideos
+    },
+    'nkos-vip': {
+      title: "NKOS — #1 Emergent Community Breakthrough",
+      category: "VIP Motion & Commercial Direction",
+      desc: "A few weeks ago, NKOS didn’t exist. Today, it’s the #1 community-upvoted project on Emergent. Engineered with surgical pacing, kinetic type choreography, and commercial-grade visual impact.",
+      video: "animation/nandu/nkos_vip_emergent.mp4"
     },
     bts: {
       title: "On-Set Rigging — Production Hero BTS",
@@ -1298,7 +1313,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Open Project Modal
+  // Helper to open project modal by key
+  function openProjectByKey(key) {
+    const data = projectDetails[key];
+    if (data) {
+      modalTitle.textContent = data.title;
+      modalTag.textContent = data.category;
+      modalDesc.textContent = data.desc;
+
+      if (data.hasMultiVideo) {
+        // Multi-Video Suite (Commercial & 3D Ads, Fashion, Food, Celebrity)
+        if (modalDialog) modalDialog.classList.add('has-multi-video');
+        if (modalMultiBadge) {
+          modalMultiBadge.textContent = data.multiBadgeText || `${data.videoList.length} Films Included`;
+          modalMultiBadge.style.display = 'inline-flex';
+        }
+        if (reelGalleryTitleText) {
+          reelGalleryTitleText.textContent = data.playlistTitle || 'Featured Films Playlist';
+        }
+        if (modalReelGallery) modalReelGallery.style.display = 'block';
+        if (modalVideoNavBar) modalVideoNavBar.style.display = 'flex';
+        if (modalVideoShell) modalVideoShell.style.display = 'block';
+        if (modalImg) modalImg.style.display = 'none';
+        if (modalVideo) modalVideo.style.display = 'block';
+
+        initMultiVideoThumbnails(data.videoList);
+        switchActiveMultiVideo(0, true);
+      } else {
+        // Standard Single Image / Single Video Projects
+        if (modalDialog) modalDialog.classList.remove('has-multi-video');
+        if (modalMultiBadge) modalMultiBadge.style.display = 'none';
+        if (modalReelGallery) modalReelGallery.style.display = 'none';
+        if (modalVideoNavBar) modalVideoNavBar.style.display = 'none';
+
+        if (data.video && modalVideo) {
+          if (modalImg) modalImg.style.display = 'none';
+          if (modalVideoShell) modalVideoShell.style.display = 'block';
+          modalVideo.style.display = 'block';
+          modalVideo.src = data.video;
+          modalVideo.load();
+          const playPromise = modalVideo.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              modalVideo.muted = true;
+              modalVideo.play().catch(() => {});
+            });
+          }
+        } else {
+          if (modalVideo) {
+            modalVideo.pause();
+            modalVideo.style.display = 'none';
+          }
+          if (modalVideoShell) modalVideoShell.style.display = 'none';
+          if (modalImg) {
+            modalImg.style.display = 'block';
+            modalImg.src = data.image;
+            modalImg.alt = data.title;
+          }
+        }
+      }
+
+      if (data.driveUrl && modalActionRow) {
+        modalActionRow.style.display = 'block';
+      } else if (modalActionRow) {
+        modalActionRow.style.display = 'none';
+      }
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Open Project Modal for showcase cards
   const allProjectCards = document.querySelectorAll('.showcase-card');
   allProjectCards.forEach(card => {
     const triggerCardModal = (e) => {
@@ -1306,73 +1392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e && e.target && e.target.closest && e.target.closest('.drive-link-badge')) return;
 
       const key = card.getAttribute('data-project');
-      const data = projectDetails[key];
-      if (data) {
-        modalTitle.textContent = data.title;
-        modalTag.textContent = data.category;
-        modalDesc.textContent = data.desc;
-
-        if (data.hasMultiVideo) {
-          // Multi-Video Suite (Commercial & 3D Ads, Fashion, Food, Celebrity)
-          if (modalDialog) modalDialog.classList.add('has-multi-video');
-          if (modalMultiBadge) {
-            modalMultiBadge.textContent = data.multiBadgeText || `${data.videoList.length} Films Included`;
-            modalMultiBadge.style.display = 'inline-flex';
-          }
-          if (reelGalleryTitleText) {
-            reelGalleryTitleText.textContent = data.playlistTitle || 'Featured Films Playlist';
-          }
-          if (modalReelGallery) modalReelGallery.style.display = 'block';
-          if (modalVideoNavBar) modalVideoNavBar.style.display = 'flex';
-          if (modalVideoShell) modalVideoShell.style.display = 'block';
-          if (modalImg) modalImg.style.display = 'none';
-          if (modalVideo) modalVideo.style.display = 'block';
-
-          initMultiVideoThumbnails(data.videoList);
-          switchActiveMultiVideo(0, true);
-        } else {
-          // Standard Single Image / Single Video Projects
-          if (modalDialog) modalDialog.classList.remove('has-multi-video');
-          if (modalMultiBadge) modalMultiBadge.style.display = 'none';
-          if (modalReelGallery) modalReelGallery.style.display = 'none';
-          if (modalVideoNavBar) modalVideoNavBar.style.display = 'none';
-
-          if (data.video && modalVideo) {
-            if (modalImg) modalImg.style.display = 'none';
-            if (modalVideoShell) modalVideoShell.style.display = 'block';
-            modalVideo.style.display = 'block';
-            modalVideo.src = data.video;
-            modalVideo.load();
-            const playPromise = modalVideo.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(() => {
-                modalVideo.muted = true;
-                modalVideo.play().catch(() => {});
-              });
-            }
-          } else {
-            if (modalVideo) {
-              modalVideo.pause();
-              modalVideo.style.display = 'none';
-            }
-            if (modalVideoShell) modalVideoShell.style.display = 'none';
-            if (modalImg) {
-              modalImg.style.display = 'block';
-              modalImg.src = data.image;
-              modalImg.alt = data.title;
-            }
-          }
-        }
-
-        if (data.driveUrl && modalActionRow) {
-          modalActionRow.style.display = 'block';
-        } else if (modalActionRow) {
-          modalActionRow.style.display = 'none';
-        }
-
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
+      openProjectByKey(key);
     };
 
     card.addEventListener('click', triggerCardModal);
@@ -1387,6 +1407,73 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // VIP Spotlight Player & Interactive Controls
+  const vipSpotlightVideo = document.getElementById('vipSpotlightVideo');
+  const vipPlayPauseBtn = document.getElementById('vipPlayPauseBtn');
+  const vipMuteToggleBtn = document.getElementById('vipMuteToggleBtn');
+  const vipSoundLabel = document.getElementById('vipSoundLabel');
+  const vipOpenModalBtn = document.getElementById('vipOpenModalBtn');
+  const vipContactBtn = document.getElementById('vipContactBtn');
+
+  if (vipSpotlightVideo && vipPlayPauseBtn) {
+    const iconPause = vipPlayPauseBtn.querySelector('.icon-pause');
+    const iconPlay = vipPlayPauseBtn.querySelector('.icon-play');
+    const label = vipPlayPauseBtn.querySelector('.vip-btn-label');
+
+    function toggleVipPlay() {
+      if (vipSpotlightVideo.paused) {
+        vipSpotlightVideo.play().catch(() => {});
+        if (iconPause) iconPause.style.display = 'inline-block';
+        if (iconPlay) iconPlay.style.display = 'none';
+        if (label) label.textContent = 'Pause';
+      } else {
+        vipSpotlightVideo.pause();
+        if (iconPause) iconPause.style.display = 'none';
+        if (iconPlay) iconPlay.style.display = 'inline-block';
+        if (label) label.textContent = 'Play';
+      }
+    }
+
+    vipPlayPauseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleVipPlay();
+    });
+
+    vipSpotlightVideo.addEventListener('click', () => {
+      toggleVipPlay();
+    });
+  }
+
+  if (vipSpotlightVideo && vipMuteToggleBtn) {
+    const iconMuted = vipMuteToggleBtn.querySelector('.icon-muted');
+    const iconUnmuted = vipMuteToggleBtn.querySelector('.icon-unmuted');
+
+    vipMuteToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      vipSpotlightVideo.muted = !vipSpotlightVideo.muted;
+      if (vipSpotlightVideo.muted) {
+        if (iconMuted) iconMuted.style.display = 'inline-block';
+        if (iconUnmuted) iconUnmuted.style.display = 'none';
+        if (vipSoundLabel) vipSoundLabel.textContent = 'Unmute Sound';
+      } else {
+        if (iconMuted) iconMuted.style.display = 'none';
+        if (iconUnmuted) iconUnmuted.style.display = 'inline-block';
+        if (vipSoundLabel) vipSoundLabel.textContent = 'Mute Sound';
+        // Ensure video is playing when unmuted
+        if (vipSpotlightVideo.paused) {
+          vipSpotlightVideo.play().catch(() => {});
+        }
+      }
+    });
+  }
+
+  if (vipOpenModalBtn) {
+    vipOpenModalBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openProjectByKey('nkos-vip');
+    });
+  }
 
   // Category Filtering Logic
   const filterTabs = document.querySelectorAll('.filter-tab');
@@ -1679,6 +1766,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (navContactBtn) navContactBtn.addEventListener('click', openContactModal);
   if (behindContactBtn) behindContactBtn.addEventListener('click', openContactModal);
+  if (vipContactBtn) vipContactBtn.addEventListener('click', openContactModal);
   if (contactModalCloseBtn) contactModalCloseBtn.addEventListener('click', closeContactModal);
   if (contactModalBackdrop) contactModalBackdrop.addEventListener('click', closeContactModal);
 
@@ -1722,7 +1810,7 @@ document.addEventListener('DOMContentLoaded', () => {
     anchor.addEventListener('click', function(e) {
       const targetId = this.getAttribute('href');
       // If it's a contact trigger button, modal handler takes precedence
-      if (this.id === 'nav-contact-btn' || this.id === 'behind-contact-btn') {
+      if (this.id === 'nav-contact-btn' || this.id === 'behind-contact-btn' || this.id === 'vipContactBtn') {
         return;
       }
       if (targetId && targetId !== '#') {
