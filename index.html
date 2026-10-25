@@ -846,15 +846,17 @@
           <div class="comparison-stage" id="colorComparison">
             <!-- Graded Layer (Base) -->
             <div class="compare-layer compare-graded">
-              <video id="compareGradedVideo" class="compare-img compare-video" src="color/coloring.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto"></video>
-              <span class="compare-tag compare-tag-right">Final Grade • Rec.709</span>
+              <video id="compareGradedVideo" class="compare-img compare-video" src="color/coloring.mp4" autoplay muted playsinline webkit-playsinline preload="auto"></video>
             </div>
 
             <!-- LOG Layer (Clipped dynamically by slider position) -->
             <div class="compare-layer compare-log" id="logLayer">
-              <video id="compareLogVideo" class="compare-img compare-video compare-log-filter" src="color/coloring.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto"></video>
-              <span class="compare-tag compare-tag-left">Raw / Alexa LOG</span>
+              <video id="compareLogVideo" class="compare-img compare-video compare-log-filter" src="color/coloring.mp4" autoplay muted playsinline webkit-playsinline preload="auto"></video>
             </div>
+
+            <!-- Persistent Badges (Unclipped, always crisp) -->
+            <span class="compare-tag compare-tag-left">Raw / Alexa LOG</span>
+            <span class="compare-tag compare-tag-right">Final Grade • Rec.709</span>
 
             <!-- Draggable Divider Line & Handle -->
             <div class="compare-divider" id="compareDivider">

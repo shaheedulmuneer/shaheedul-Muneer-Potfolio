@@ -1582,35 +1582,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateSplitPosition(clientX) {
       const rect = colorComparison.getBoundingClientRect();
-      if (rect.width === 0) return;
+      if (!rect.width) return;
       let percent = ((clientX - rect.left) / rect.width) * 100;
-      percent = Math.max(3, Math.min(97, percent));
+      percent = Math.max(0, Math.min(100, percent));
       currentSplit = percent;
       colorComparison.style.setProperty('--split', `${percent.toFixed(2)}%`);
+      colorComparison.setAttribute('aria-valuenow', Math.round(percent));
     }
 
-    colorComparison.addEventListener('pointerdown', (e) => {
+    const startDragging = (e) => {
       isDraggingSplit = true;
       colorComparison.classList.add('is-scrubbing');
-      if (colorComparison.setPointerCapture) {
+      if (colorComparison.setPointerCapture && e.pointerId) {
         try {
           colorComparison.setPointerCapture(e.pointerId);
         } catch (_) {}
       }
       updateSplitPosition(e.clientX);
-    });
+    };
 
-    colorComparison.addEventListener('pointermove', (e) => {
+    const onDragging = (e) => {
       if (isDraggingSplit) {
         updateSplitPosition(e.clientX);
       }
-    });
+    };
 
     const stopDragging = (e) => {
       if (isDraggingSplit) {
         isDraggingSplit = false;
         colorComparison.classList.remove('is-scrubbing');
-        if (e && colorComparison.releasePointerCapture && e.pointerId) {
+        if (e && e.pointerId && colorComparison.releasePointerCapture) {
           try {
             colorComparison.releasePointerCapture(e.pointerId);
           } catch (_) {}
@@ -1618,22 +1619,29 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    colorComparison.addEventListener('pointerup', stopDragging);
-    colorComparison.addEventListener('pointercancel', stopDragging);
+    colorComparison.addEventListener('pointerdown', startDragging);
+    window.addEventListener('pointermove', onDragging);
+    window.addEventListener('pointerup', stopDragging);
+    window.addEventListener('pointercancel', stopDragging);
 
     // Keyboard support (arrow keys when focused)
     colorComparison.setAttribute('tabindex', '0');
     colorComparison.setAttribute('role', 'slider');
     colorComparison.setAttribute('aria-label', 'Color grading comparison slider');
+    colorComparison.setAttribute('aria-valuenow', '50');
+    colorComparison.setAttribute('aria-valuemin', '0');
+    colorComparison.setAttribute('aria-valuemax', '100');
     colorComparison.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        currentSplit = Math.max(3, currentSplit - 4);
+        currentSplit = Math.max(0, currentSplit - 4);
         colorComparison.style.setProperty('--split', `${currentSplit.toFixed(2)}%`);
+        colorComparison.setAttribute('aria-valuenow', Math.round(currentSplit));
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        currentSplit = Math.min(97, currentSplit + 4);
+        currentSplit = Math.min(100, currentSplit + 4);
         colorComparison.style.setProperty('--split', `${currentSplit.toFixed(2)}%`);
+        colorComparison.setAttribute('aria-valuenow', Math.round(currentSplit));
       }
     });
 
@@ -1642,7 +1650,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const compareLogVideo = document.getElementById('compareLogVideo');
 
     if (compareGradedVideo && compareLogVideo) {
-      // Ensure mobile-ready properties
       [compareGradedVideo, compareLogVideo].forEach(v => {
         v.muted = true;
         v.defaultMuted = true;
@@ -1650,18 +1657,81 @@ document.addEventListener('DOMContentLoaded', () => {
         v.setAttribute('webkit-playsinline', '');
       });
 
-      // Synchronize play/pause and looping without seeking interruptions
+      let syncRafId = null;
+
+      // Continuous frame-accurate synchronization loop
+      const syncVideos = () => {
+        if (!compareGradedVideo.paused) {
+          const masterTime = compareGradedVideo.currentTime;
+          const slaveTime = compareLogVideo.currentTime;
+          const drift = Math.abs(masterTime - slaveTime);
+
+          // If drift exceeds 40ms (1 frame at 25fps), snap slave directly to master
+          if (drift > 0.04) {
+            compareLogVideo.currentTime = masterTime;
+          }
+
+          // Ensure slave continues playing alongside master
+          if (compareLogVideo.paused && compareGradedVideo.readyState >= 2) {
+            compareLogVideo.play().catch(() => {});
+          }
+
+          // Atomic loop check: reset both to 0 together before EOF stutter
+          const duration = compareGradedVideo.duration;
+          if (duration && duration > 0 && masterTime >= duration - 0.08) {
+            compareGradedVideo.currentTime = 0;
+            compareLogVideo.currentTime = 0;
+            compareGradedVideo.play().catch(() => {});
+            compareLogVideo.play().catch(() => {});
+          }
+        }
+        syncRafId = requestAnimationFrame(syncVideos);
+      };
+
+      const playBoth = () => {
+        compareLogVideo.currentTime = compareGradedVideo.currentTime;
+        const p1 = compareGradedVideo.play();
+        const p2 = compareLogVideo.play();
+        if (p1 !== undefined) p1.catch(() => {});
+        if (p2 !== undefined) p2.catch(() => {});
+        if (!syncRafId) {
+          syncRafId = requestAnimationFrame(syncVideos);
+        }
+      };
+
+      const pauseBoth = () => {
+        compareGradedVideo.pause();
+        compareLogVideo.pause();
+        if (syncRafId) {
+          cancelAnimationFrame(syncRafId);
+          syncRafId = null;
+        }
+      };
+
+      // Master event bindings
       compareGradedVideo.addEventListener('play', () => {
-        if (compareLogVideo.paused) compareLogVideo.play().catch(() => {});
+        compareLogVideo.currentTime = compareGradedVideo.currentTime;
+        compareLogVideo.play().catch(() => {});
+        if (!syncRafId) syncRafId = requestAnimationFrame(syncVideos);
       });
+
       compareGradedVideo.addEventListener('pause', () => {
-        if (!compareLogVideo.paused) compareLogVideo.pause();
+        compareLogVideo.pause();
       });
+
+      compareGradedVideo.addEventListener('waiting', () => {
+        compareLogVideo.pause();
+      });
+
+      compareGradedVideo.addEventListener('playing', () => {
+        compareLogVideo.currentTime = compareGradedVideo.currentTime;
+        compareLogVideo.play().catch(() => {});
+      });
+
       compareGradedVideo.addEventListener('seeked', () => {
         compareLogVideo.currentTime = compareGradedVideo.currentTime;
       });
 
-      // Catch end of video loop to keep perfectly aligned
       compareGradedVideo.addEventListener('ended', () => {
         compareGradedVideo.currentTime = 0;
         compareLogVideo.currentTime = 0;
@@ -1669,32 +1739,28 @@ document.addEventListener('DOMContentLoaded', () => {
         compareLogVideo.play().catch(() => {});
       });
 
-      const playBoth = () => {
-        const p1 = compareGradedVideo.play();
-        const p2 = compareLogVideo.play();
-        if (p1 !== undefined) p1.catch(() => {});
-        if (p2 !== undefined) p2.catch(() => {});
-      };
+      compareLogVideo.addEventListener('loadedmetadata', () => {
+        compareLogVideo.currentTime = compareGradedVideo.currentTime;
+      });
 
       // Autoplay on load
       playBoth();
 
-      // Trigger playback when scrolled into view
+      // Viewport Intersection Observer: play only when in view
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               playBoth();
             } else {
-              compareGradedVideo.pause();
-              compareLogVideo.pause();
+              pauseBoth();
             }
           });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
         observer.observe(colorComparison);
       }
 
-      // Resume on any interaction or tap anywhere
+      // Resume on user touch or click
       colorComparison.addEventListener('pointerdown', playBoth);
       window.addEventListener('touchstart', playBoth, { once: true, passive: true });
       window.addEventListener('click', playBoth, { once: true, passive: true });
@@ -1706,6 +1772,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (launchCinemaBtn) {
     launchCinemaBtn.addEventListener('click', () => {
       if (modal && modalVideo) {
+        if (compareGradedVideo) compareGradedVideo.pause();
+        if (compareLogVideo) compareLogVideo.pause();
         modalTitle.textContent = "Color Science & Post-Production";
         modalTag.textContent = "Color Grading Breakdown • 2026";
         modalDesc.textContent = "Full resolution commercial color grade breakdown and cinematic post-production by Shaheedul Muneer.";
@@ -1867,7 +1935,7 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(renderCursor);
 
     // Interactive Hover Expansion on links, buttons, cards, and interactive elements
-    const interactiveSelectors = 'a, button, .showcase-card, .service-pill-item, .filter-tab, .toolkit-tab, .toolkit-card, .toolkit-float-item, .brand-item, .reel-thumbnail-item, .contact-method-card, .video-nav-arrow, .reel-track-btn, .about-float-item, input, textarea, [role="button"]';
+    const interactiveSelectors = 'a, button, .showcase-card, .service-pill-item, .filter-tab, .toolkit-tab, .toolkit-card, .toolkit-float-item, .brand-item, .reel-thumbnail-item, .contact-method-card, .video-nav-arrow, .reel-track-btn, .about-float-item, .comparison-stage, .divider-handle, input, textarea, [role="button"]';
 
     document.addEventListener('mouseover', (e) => {
       if (e.target && e.target.closest && e.target.closest(interactiveSelectors)) {

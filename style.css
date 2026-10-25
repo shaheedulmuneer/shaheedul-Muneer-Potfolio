@@ -1521,8 +1521,9 @@ html.reduced-motion .anim-element {
   border-radius: 20px;
   overflow: hidden;
   user-select: none;
+  -webkit-user-select: none;
   cursor: ew-resize;
-  touch-action: pan-y;
+  touch-action: none;
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
@@ -1564,15 +1565,20 @@ html.reduced-motion .anim-element {
 .compare-tag {
   position: absolute;
   top: 18px;
-  z-index: 3;
+  z-index: 5;
   padding: 6px 14px;
-  background: rgba(14, 14, 17, 0.92);
+  background: rgba(14, 14, 17, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-pill);
   font-size: 0.78rem;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.01em;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.2s ease;
 }
 
 .compare-tag-left {
@@ -3358,7 +3364,10 @@ html.reduced-motion .anim-element {
   body.has-custom-cursor [role="button"],
   body.has-custom-cursor .service-pill-item,
   body.has-custom-cursor .filter-tab,
-  body.has-custom-cursor .toolkit-card {
+  body.has-custom-cursor .toolkit-card,
+  body.has-custom-cursor .comparison-stage,
+  body.has-custom-cursor .compare-divider,
+  body.has-custom-cursor .divider-handle {
     cursor: none !important;
   }
 }
