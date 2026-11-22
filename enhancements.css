@@ -1,0 +1,220 @@
+/* ==========================================================================
+   DESIGN ENHANCEMENTS — layered on top of style.css
+   Remove the <link> to this file to revert everything.
+   ========================================================================== */
+
+/* ---------- 1. Floating glass navigation ---------- */
+.sm-nav {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  width: min(1240px, calc(100% - 32px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 8px 8px 10px;
+  border-radius: 9999px;
+  background: rgba(14, 14, 18, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  transition: transform 0.5s var(--ease-out), opacity 0.4s ease, background 0.3s ease;
+}
+.sm-nav.is-hidden {
+  transform: translate(-50%, -140%);
+  opacity: 0;
+}
+.sm-nav.is-scrolled { background: rgba(10, 10, 12, 0.78); }
+
+.sm-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+}
+.sm-monogram {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(140deg, #ff6a2b 0%, #ff4d17 45%, #b3200a 100%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18) inset, 0 6px 18px var(--accent-orange-glow);
+}
+.sm-brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.sm-brand-name { font-weight: 700; font-size: 0.92rem; letter-spacing: -0.01em; }
+.sm-brand-role { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 0.04em; }
+
+.sm-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.sm-links a {
+  display: block;
+  padding: 9px 16px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.sm-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.sm-links a.is-active { color: #fff; background: rgba(255, 77, 23, 0.16); }
+
+.sm-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  background: var(--accent-orange);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 20px var(--accent-orange-glow);
+  transition: transform 0.3s var(--ease-out), background 0.25s ease;
+}
+.sm-cta:hover { background: var(--accent-orange-hover); transform: translateY(-2px); }
+.sm-cta-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #3dff8a;
+  box-shadow: 0 0 0 0 rgba(61, 255, 138, 0.6);
+  animation: smPulse 2s infinite;
+}
+@keyframes smPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(61, 255, 138, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(61, 255, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(61, 255, 138, 0); }
+}
+
+/* make room for the nav above the hero kicker */
+.hero-content-shell { padding-top: 64px; }
+
+/* ---------- 2. Scroll progress line ---------- */
+.sm-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #ff4d17, #ffb347);
+  box-shadow: 0 0 10px rgba(255, 77, 23, 0.7);
+  z-index: 9001;
+  pointer-events: none;
+}
+
+/* ---------- 3. Cinematic film grain ---------- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 8999;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: smGrain 0.9s steps(4) infinite;
+}
+@keyframes smGrain {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3%, 2%); }
+  50%  { transform: translate(2%, -3%); }
+  75%  { transform: translate(-2%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- 4. Hero name line ---------- */
+.sm-hero-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.01em;
+}
+.sm-hero-name::before {
+  content: "";
+  width: 34px; height: 2px;
+  background: var(--accent-orange);
+  border-radius: 2px;
+}
+.sm-hero-name span { color: var(--text-secondary); font-weight: 500; }
+
+/* ---------- 5. Readability scrim behind the "Shaping Stories" intro ---------- */
+.behind-header-grid { position: relative; isolation: isolate; }
+.behind-header-grid::before {
+  content: "";
+  position: absolute;
+  inset: -60px -80px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(8, 8, 10, 0.7) 0%, rgba(8, 8, 10, 0.45) 45%, transparent 75%);
+  filter: blur(10px);
+}
+.behind-cta-note { color: rgba(255, 255, 255, 0.6); }
+
+/* ---------- 6. About — bring it into the orange brand palette ---------- */
+.about-display-title {
+  background: linear-gradient(180deg, #ffffff 0%, #ffd2c2 60%, #ff8a5c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.about-display-title::after {
+  content: "";
+  display: block;
+  width: 56px; height: 3px;
+  margin: 18px auto 0;
+  border-radius: 3px;
+  background: var(--accent-orange);
+  box-shadow: 0 0 14px var(--accent-orange-glow);
+}
+.about-contact-btn {
+  background: var(--accent-orange);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 26px var(--accent-orange-glow), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+.about-contact-btn:hover {
+  background: var(--accent-orange-hover);
+  box-shadow: 0 12px 36px rgba(255, 77, 23, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- 7. Section reveal + card hover polish ---------- */
+.sm-reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out); }
+.sm-reveal.is-in { opacity: 1; transform: none; }
+
+.showcase-card { transition: transform 0.5s var(--ease-out), box-shadow 0.5s ease; }
+.showcase-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 77, 23, 0.35);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .sm-links { display: none; }
+  .sm-brand-role { display: none; }
+}
+@media (max-width: 480px) {
+  .sm-nav { top: 10px; width: calc(100% - 20px); }
+  .sm-monogram { width: 34px; height: 34px; font-size: 0.78rem; }
+  .sm-brand-name { font-size: 0.85rem; }
+  .sm-cta { padding: 9px 14px; font-size: 0.8rem; }
+  .hero-content-shell { padding-top: 56px; }
+  .sm-hero-name { margin-top: 14px; font-size: 0.88rem; white-space: nowrap; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .sm-hero-name::before { width: 22px; }
+  .sm-hero-name span { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after, .sm-cta-dot { animation: none; }
+  .sm-reveal { opacity: 1; transform: none; transition: none; }
+}
