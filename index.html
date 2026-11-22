@@ -9,8 +9,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=19.0">
+  <link rel="stylesheet" href="enhancements.css?v=1.0">
 </head>
 <body>
+
+  <!-- Scroll progress + floating navigation -->
+  <div class="sm-progress" id="smProgress" aria-hidden="true"></div>
+  <nav class="sm-nav" id="smNav" aria-label="Main">
+    <a href="#hero" class="sm-brand" aria-label="Shaheedul Muneer — home">
+      <span class="sm-monogram">SM</span>
+      <span class="sm-brand-text">
+        <span class="sm-brand-name">Shaheedul Muneer</span>
+        <span class="sm-brand-role">Video · Motion · Dubai</span>
+      </span>
+    </a>
+    <ul class="sm-links">
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#showreel">Color</a></li>
+      <li><a href="#toolkit">Toolkit</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="#contact" class="sm-cta"><span class="sm-cta-dot"></span>Let's talk</a>
+  </nav>
 
   <!-- Persistent Global Canvas Scroll Animation Stage (Spans Creative Director to Contact) -->
   <div class="global-scroll-canvas-stage" id="globalCanvasStage">
@@ -37,6 +57,7 @@
             <h1 class="hero-display-title">
               Creative<br>Director
             </h1>
+            <p class="sm-hero-name">Shaheedul Muneer <span>— Dubai, UAE</span></p>
           </div>
         </div>
 
@@ -1234,7 +1255,7 @@
           </div>
 
           <div class="footer-bottom-row">
-            <p class="copyright-text">© 2026 Folioblox. Directed by Shaheedul Muneer — Dubai, UAE. All rights reserved.</p>
+            <p class="copyright-text">© 2026 Shaheedul Muneer — Dubai, UAE. All rights reserved.</p>
             <div class="footer-links">
               <a href="#hero">Back to top ↑</a>
             </div>
@@ -1372,5 +1393,6 @@
   <script src="animations.config.js"></script>
   <script src="animations.js"></script>
   <script src="script.js?v=10.0"></script>
+  <script src="enhancements.js?v=1.0"></script>
 </body>
 </html>
